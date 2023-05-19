@@ -1,0 +1,13 @@
+print -u2 -- "1=$1"
+y7s=$(y7findsubconfig "$1" lesskey.conf "$1/config")
+typeset -p y7s
+if [[ -r "$y7s" && $(y7which lesskey) == /* ]]
+then
+    y7d="${XDG_DATA_HOME}/$1/$Y7OS-$Y7HW/lesskeys"
+    if [[ ! -f "$y7d" || "$y7s" -nt "$y7d" ]]
+    then
+        mkdir -p "${y7d%/*}"
+        lesskey -o "$y7d" "$y7s"
+        print -u2 "note: compiled \"$y7d\"."
+    fi
+fi
